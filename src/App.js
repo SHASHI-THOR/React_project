@@ -40,29 +40,27 @@ const Login = ({ onLogin }) => {
   );
 };
 
-const Dashboard = ({ employees, onEmployeeClick }) => {
+const Dashboard = ({ employees }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredEmployees = employees.filter((employee) =>
+    employee.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="dashboard-container">
       <h2>Employee List</h2>
-      <input type="text" placeholder="Search by employee name" />
-      <div className="employee-list">
-        {employees.map((employee) => (
-          <div key={employee.id} className="employee-card" onClick={() => onEmployeeClick(employee)}>
-            <p>{employee.name}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const EmployeeDetails = ({ employee, onClose }) => {
-  return (
-    <div className="employee-details">
-      <h3>{employee.name}</h3>
-      <p>ID: {employee.id}</p>
-      <p>Details: {employee.details}</p>
-      <button onClick={onClose}>Close</button>
+      <input
+        type="text"
+        placeholder="Search by employee name"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      {filteredEmployees.map((employee) => (
+        <div key={employee.id} className="employee-card">
+          <p>{employee.name}</p>
+        </div>
+      ))}
     </div>
   );
 };
