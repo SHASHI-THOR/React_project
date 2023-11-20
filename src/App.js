@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const Login = ({ onLogin }) => {
@@ -40,8 +40,12 @@ const Login = ({ onLogin }) => {
   );
 };
 
-const Dashboard = ({ employees }) => {
+const Dashboard = ({ employees, onEmployeeClick }) => {
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    // This will ensure that the component re-renders when the search term changes
+  }, [searchTerm]);
 
   const filteredEmployees = employees.filter((employee) =>
     employee.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -57,10 +61,21 @@ const Dashboard = ({ employees }) => {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
       {filteredEmployees.map((employee) => (
-        <div key={employee.id} className="employee-card">
+        <div key={employee.id} className="employee-card" onClick={() => onEmployeeClick(employee)}>
           <p>{employee.name}</p>
         </div>
       ))}
+    </div>
+  );
+};
+
+const EmployeeDetails = ({ employee, onClose }) => {
+  return (
+    <div className="employee-details">
+      <h3>{employee.name}</h3>
+      <p>ID: {employee.id}</p>
+      <p>Details: {employee.details}</p>
+      <button onClick={onClose}>Close</button>
     </div>
   );
 };
